@@ -56,8 +56,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 ////////////////////////////////////////////////////////////////////////
 
 document.getElementById("effects").addEventListener("click", function(){
-    Tone.start();
-
+    
+/* 
     const seq = new Tone.Sequence((time, note) => {
         synth.triggerAttackRelease(note, 0.1, time);
         // subdivisions are given as subarrays
@@ -73,12 +73,8 @@ document.getElementById("effects").addEventListener("click", function(){
        // subdivisions are given as subarrays
    }, randomArray3).start(0);
     
-    // start/stop the oscllator every quarter note
-    
-    Tone.Transport.start();
-
-
-  
+    Tone.start();
+    Tone.Transport.start(); */
 
 });
 
@@ -130,10 +126,11 @@ Tone.Transport.bpm.value = 50;
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
 
-
-
-
   };
+
+  
+
+  
   }
 
 
@@ -246,6 +243,8 @@ function init(options) {
         // If making new canvases, remember to update "diffcam.js"
 
         requestWebcam();
+
+        
     }
 
 function capture() {
@@ -527,8 +526,27 @@ function requestWebcam() {
     navigator.mediaDevices.getUserMedia(constraints)
         .then(initSuccess)
         .catch(initError);
+
+        
 }
 function initSuccess(requestedStream) {
+    const seq = new Tone.Sequence((time, note) => {
+        synth.triggerAttackRelease(note, 0.1, time);
+        // subdivisions are given as subarrays
+    }, randomArray).start(0);
+
+    const seq2 = new Tone.Sequence((time, note) => {
+       synth2.triggerAttackRelease(note, 0.1, time);
+       // subdivisions are given as subarrays
+   }, randomArray2).start(0);
+
+   const seq3 = new Tone.Sequence((time, note) => {
+       synth3.triggerAttackRelease(note, 0.1, time);
+       // subdivisions are given as subarrays
+   }, randomArray3).start(0);
+    
+    Tone.start();
+    Tone.Transport.start();
     stream = requestedStream;
     initSuccessCallback();
 }
