@@ -31,86 +31,93 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toDestination();
     const pingPong = new Tone.PingPongDelay().connect(gainNode);
+    const pitchShift = new Tone.PitchShift().connect(gainNode);
+    const freeverb = new Tone.Reverb().connect(gainNode);
+freeverb.dampening = 1000;
     const phaser = new Tone.Phaser({
       frequency: 15,
       octaves: 2,
       baseFrequency: 300
-    }).connect(pingPong);
-    const synth = new Tone.FMSynth();
-    const synth2 = new Tone.AMSynth();
-  //  const synth3 = new Tone.PluckSynth();
-    const synth3 = new Tone.Sampler({
-        urls: {
-            A1: "A1.mp3",
-            A2: "A2.mp3",
+    }).connect(gainNode);
+    const synth = new Tone.Synth({
+        oscillator: {
+          type: "sine"
         },
-        baseUrl: "https://tonejs.github.io/audio/casio/",
-   
-    });
+        envelope: {
+            attack: 0.1,
+            decay: 0.3,
+            sustain: 0.4,
+            release: 0.5,
+        }
+      })
+    const synth2 = new Tone.Synth({
+        oscillator: {
+          type: "sine3"
+        },
+        envelope: {
+          attack: 0.1,
+          decay: 0.3,
+          sustain: 0.4,
+          release: 0.8,
+        }/* ,
+        filterEnvelope: {
+          attack: 0.01,
+          decay: 0.7,
+          sustain: 0.1,
+          release: 0.8,
+          baseFrequency: 300,
+          octaves: 4
+        } */
+      })
+  //  const synth3 = new Tone.PluckSynth();
+    const synth3 = new Tone.Synth({
+        oscillator: {
+          type: "sine6"
+        },
+        envelope: {
+          attack: 0.1,
+          decay: 0.3,
+          sustain: 0.4,
+          release: 0.5,
+        }/* ,
+        filterEnvelope: {
+          attack: 0.001,
+          decay: 0.7,
+          sustain: 0.1,
+          release: 0.8,
+          baseFrequency: 300,
+          octaves: 4
+        } */
+      });
 
+    const synth5 = new Tone.MembraneSynth().connect(gainNode);
+
+    var pattern5 = new Tone.Pattern(function(time, note){
+        synth5.triggerAttackRelease(note, 0.9);
+    }, ["C1", ["C1", "C1", "C1"], "E4", ["C3", "C3"], "C1", "C1", "F2", "F2"]);
+    pattern5.start();
+    pattern5.mute = false;
+//["C1", ["C1", "C1", "C1"], "E4", ["C3", "C3"], "C1", "C1", "F2", "F2"]
     gainNode.gain.value = 0.5;
     
 
-////////////////////////////////////////////////////////////////////////
-////////// INTERACTING with HTML file //////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-
-document.getElementById("effects").addEventListener("click", function(){
-    
-/* 
-    const seq = new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, 0.1, time);
-        // subdivisions are given as subarrays
-    }, randomArray).start(0);
-
-    const seq2 = new Tone.Sequence((time, note) => {
-       synth2.triggerAttackRelease(note, 0.1, time);
-       // subdivisions are given as subarrays
-   }, randomArray2).start(0);
-
-   const seq3 = new Tone.Sequence((time, note) => {
-       synth3.triggerAttackRelease(note, 0.1, time);
-       // subdivisions are given as subarrays
-   }, randomArray3).start(0);
-    
-    Tone.start();
-    Tone.Transport.start(); */
-
-});
-
-
-
-document.getElementById("mute").addEventListener("click", function(){
-    gainNode.gain.rampTo(0, 0.2);
-    
-  if(this.className == 'is-playing'){
-    this.className = "";
-    this.innerHTML = "MUTE"
-    gainNode.gain.rampTo(0.5, 0.2);
-  }else{
-    this.className = "is-playing";
-    this.innerHTML = "UNMUTE";
-
-    gainNode.gain.rampTo(0, 0.2);
-
-  }
-
-});
-
-Tone.Transport.bpm.value = 50;
+Tone.Transport.bpm.value = 120;
 
 
 
   // Random tone generator 
   const freq = note => 2 ** (note / 12) * 440; // 440 is the frequency of A4
   // the bitwise Or does the same as Math.floor
-  const notes = [ -15, -14, -13, -12, -11, -10, -9, -8, -7,  -6, -5, -4, -3 ,-2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9]; // Close to your 100, 400, 1600 and 6300
+  const notes = [4, 7, 9, 12, 14, 16]; 
+  const notes2 = [-5 , -3, 0,  4, 7, 9]; 
+  const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+   // const notes3 = [-8, -5, -3 ,0, 2, 4,  7, 9, 12, 14, 16, 19]; 
 
   let randomArray = [];
   let randomArray2 = [];
   let randomArray3 = [];
   function createRandomness() {
-    for (var i = 0; i < 100; i += 1) {
+    for (var i = 0; i < 40; i += 1) {
 
       const randomNote = () => notes[Math.random() * notes.length | 0]; // the bitwise Or does the same as Math.floor
   
@@ -118,11 +125,11 @@ Tone.Transport.bpm.value = 50;
       randomArray.push(random);
   
   
-      const randomNote2 = () => notes[Math.random() * notes.length | 0]; // the bitwise Or does the same as Math.floor
+      const randomNote2 = () => notes[Math.random() * notes2.length | 0]; // the bitwise Or does the same as Math.floor
      let random2 = freq(randomNote2());
      randomArray2.push(random2);
   
-     const randomNote3 = () => notes[Math.random() * notes.length | 0]; // the bitwise Or does the same as Math.floor
+     const randomNote3 = () => notes[Math.random() * notes3.length | 0]; // the bitwise Or does the same as Math.floor
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
 
@@ -371,9 +378,10 @@ function capture() {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
                 //console.log(score * 10)
-                let tempo = score * 10;
+        //        let tempo = i;
+        //        console.log(tempo);
 
-                Tone.Transport.bpm.rampTo(tempo, 0.5);
+        //        Tone.Transport.bpm.rampTo(tempo, 0.5);
 			// A simple volume control:
 
 
@@ -382,8 +390,11 @@ function capture() {
             let filterScale = generateScaleFunction(0, 249, 0, 10);      
             xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
-            
+            //var normXvalue = 
+            console.log(xValue / 10);
+            pitchShift.pitch = Math.floor(xValue / 2);
             phaser.frequency.value = xValue;
+            pingPong.feedback.value = xValue / 10;
             //phaser.baseFrequency.rampTo(xValue, 0.2);
 			}
         }
@@ -432,19 +443,19 @@ function capture() {
 
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 28)
-                synth.connect(phaser);
+                synth.connect(freeverb);
                 // synth2.triggerAttackRelease("E3", "2n");
 
             else if (i == 24)
-                synth2.connect(phaser);
+                synth2.connect(freeverb);
             else if (i == 20)
-                synth3.connect(phaser);
+                synth3.connect(freeverb);
              else if (i == 16)
-                synth.disconnect(phaser);
+                synth.disconnect(freeverb);
             else if (i == 12)
-                synth2.disconnect(phaser);
+                synth2.disconnect(freeverb);
             else if (i == 8)
-                synth3.disconnect(phaser);
+                synth3.disconnect(freeverb);
 
 			}
         }
@@ -531,17 +542,17 @@ function requestWebcam() {
 }
 function initSuccess(requestedStream) {
     const seq = new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, 0.1, time);
+        synth.triggerAttackRelease(note, 0.3, time);
         // subdivisions are given as subarrays
     }, randomArray).start(0);
 
     const seq2 = new Tone.Sequence((time, note) => {
-       synth2.triggerAttackRelease(note, 0.1, time);
+       synth2.triggerAttackRelease(note, 0.3, time);
        // subdivisions are given as subarrays
    }, randomArray2).start(0);
 
    const seq3 = new Tone.Sequence((time, note) => {
-       synth3.triggerAttackRelease(note, 0.1, time);
+       synth3.triggerAttackRelease(note, 0.3, time);
        // subdivisions are given as subarrays
    }, randomArray3).start(0);
     
