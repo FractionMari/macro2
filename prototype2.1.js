@@ -125,20 +125,26 @@ Tone.Transport.bpm.value = 60;
 
 
   // Random tone generator 
-  const freq = note => 2 ** (note / 12) * 440; // 440 is the frequency of A4
-  // the bitwise Or does the same as Math.floor
-  const notes = [4, 7, 9, 12, 14, 16]; 
-  const notes2 = [-5 , -3, 0,  4, 7, 9]; 
-  const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+  const freq = note => 2 ** (note / 12) * 440; 
+// pentatone scales
+
+ // const notes = [4, 7, 9, 12, 14, 16]; 
+ // const notes2 = [-5 , -3, 0,  4, 7, 9]; 
+ // const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+// diatonic scales 
+  const notes = [4, 6, 8, 9, 11, 13]; 
+  const notes2 = [-5, -3, -2,  0, 2, 3]; 
+  const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
+
    // const notes3 = [-8, -5, -3 ,0, 2, 4,  7, 9, 12, 14, 16, 19]; 
 
   let randomArray = [];
   let randomArray2 = [];
   let randomArray3 = [];
   function createRandomness() {
-    for (var i = 0; i < 40; i += 1) {
+    for (var i = 0; i < 16; i += 1) {
 
-      const randomNote = () => notes[Math.random() * notes.length | 0]; // the bitwise Or does the same as Math.floor
+      const randomNote = () => notes[Math.random() * notes.length | 0]; 
   
       let random = freq(randomNote());
       randomArray.push(random);
@@ -154,7 +160,7 @@ Tone.Transport.bpm.value = 60;
 
   };
 
-  
+  console.log(randomArray);
 
   
   }
