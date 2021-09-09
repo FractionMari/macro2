@@ -103,11 +103,28 @@ freeverb.dampening = 1000;
     }
     ).connect(gainNode);
 
-    var pattern6 = new Tone.Sequence(function(time, note){
-        synth6.triggerAttackRelease(note, 0.9);
-    }, ["E1", ["0", "F1"]]);
-    pattern6.start();
+        // hi hat patterns:
+        let hiPattern = [];
+        const hiPattern1 = ["E1", ["0"], "F1"];
+        const hiPattern2 = ["G2", ["C2", "C2", "C2"]];
+        const hiPattern3 = ["G2", "F2", "A4", ["0", "234"]];
 
+        // function for random number:
+/*     function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+      
+      console.log(getRandomInt(3));
+
+    if (getRandomInt(3) == 0)
+        hiPattern = hiPattern1;
+    if (getRandomInt(3) == 1)
+        hiPattern = hiPattern2;
+    else
+        hiPattern = hiPattern3;
+ */
+
+    
 
     var pattern5 = new Tone.Sequence(function(time, note){
         synth5.triggerAttackRelease(note, 0.9);
@@ -125,20 +142,31 @@ Tone.Transport.bpm.value = 60;
 
 
   // Random tone generator 
-  const freq = note => 2 ** (note / 12) * 440; // 440 is the frequency of A4
-  // the bitwise Or does the same as Math.floor
-  const notes = [4, 7, 9, 12, 14, 16]; 
-  const notes2 = [-5 , -3, 0,  4, 7, 9]; 
-  const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+
+  // Defining frequencies
+
+  const freq = note => 2 ** (note / 12) * 440; 
+// // pentatone scales:
+
+ // const notes = [4, 7, 9, 12, 14, 16]; 
+ // const notes2 = [-5 , -3, 0,  4, 7, 9]; 
+ // const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+
+// diatonic scales 
+  const notes = [4, 6, 8, 9, 11, 13]; 
+  const notes2 = [-5, -3, -2,  0, 2, 3]; 
+  const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
+
    // const notes3 = [-8, -5, -3 ,0, 2, 4,  7, 9, 12, 14, 16, 19]; 
 
   let randomArray = [];
   let randomArray2 = [];
   let randomArray3 = [];
+  let randomHiHatArray = [];
   function createRandomness() {
-    for (var i = 0; i < 40; i += 1) {
+    for (var i = 0; i < 16; i += 1) {
 
-      const randomNote = () => notes[Math.random() * notes.length | 0]; // the bitwise Or does the same as Math.floor
+      const randomNote = () => notes[Math.random() * notes.length | 0]; 
   
       let random = freq(randomNote());
       randomArray.push(random);
@@ -151,11 +179,27 @@ Tone.Transport.bpm.value = 60;
      const randomNote3 = () => notes[Math.random() * notes3.length | 0]; // the bitwise Or does the same as Math.floor
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
+     
+     // creating a random rhythm
+     function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+     let random4 = getRandomInt(10)
+
+      if (random4 > 4)
+      randomHiHatArray.push((random + " " + random2).split(" "));
+      if (random4 == 1)
+      randomHiHatArray.push((random3 + " " + random3 + " " + random3).split(" "));
+      else
+      randomHiHatArray.push(random)
 
   };
 
-  
-
+  console.log(randomHiHatArray);
+  var pattern6 = new Tone.Sequence(function(time, note){
+    synth6.triggerAttackRelease(note, 0.9);
+}, randomHiHatArray);
+pattern6.start();
   
   }
 
@@ -410,7 +454,7 @@ function capture() {
             xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
             //var normXvalue = 
-            console.log(((xValue / 10) * -1) + 1);
+            //console.log(((xValue / 10) * -1) + 1);
             pitchShift.pitch = Math.floor(xValue / 2);
             phaser.frequency.value = xValue;
             pingPong.feedback.value = xValue / 10;

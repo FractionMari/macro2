@@ -40,16 +40,24 @@ freeverb.dampening = 1000;
       octaves: 2,
       baseFrequency: 300
     }).connect(gainNode);
-    const synth = new Tone.Synth({
+    const synth = new Tone.DuoSynth({
         oscillator: {
-          type: "sine"
+          type: "sine2"
         },
         envelope: {
             attack: 0.1,
             decay: 0.3,
-            sustain: 0.4,
+            sustain: 1,
             release: 0.5,
-        }
+        },
+        filterEnvelope: {
+            attack: 0.01,
+            decay: 0.7,
+            sustain: 0.1,
+            release: 0.8,
+            baseFrequency: 300,
+            octaves: 4
+          }
       })
     const synth2 = new Tone.Synth({
         oscillator: {
@@ -91,7 +99,15 @@ freeverb.dampening = 1000;
         } */
       });
 
-    const synth5 = new Tone.MembraneSynth().connect(gainNode);
+    const synth5 = new Tone.MembraneSynth({
+        envelope: {
+            attack: 0.9,
+            decay: 0.6,
+            sustain: 0.4,
+            release: 0.5,
+          },
+       volume: -7
+    }).connect(gainNode);
     const synth6 = new Tone.MetalSynth({
         envelope: {
             attack: 0.9,
@@ -99,22 +115,9 @@ freeverb.dampening = 1000;
             sustain: 0.4,
             release: 0.5,
           },
-       volume: -6
+       volume: -7
     }
     ).connect(gainNode);
-
-    var pattern6 = new Tone.Sequence(function(time, note){
-        synth6.triggerAttackRelease(note, 0.9);
-    }, ["E1", ["0", "F1"]]);
-    pattern6.start();
-
-
-    var pattern5 = new Tone.Sequence(function(time, note){
-        synth5.triggerAttackRelease(note, 0.9);
-    }, ["C1", "C1", "E4", ["C2", "C2"], "C1", "C1", "F2", "F2"]);
-    pattern5.start();
-    pattern5.mute = true;
-
 
 
     gainNode.gain.value = 0.5;
@@ -125,24 +128,35 @@ Tone.Transport.bpm.value = 60;
 
 
   // Random tone generator 
+
+  // Defining frequencies
+
   const freq = note => 2 ** (note / 12) * 440; 
-// pentatone scales
+// // pentatone scales:
 
  // const notes = [4, 7, 9, 12, 14, 16]; 
  // const notes2 = [-5 , -3, 0,  4, 7, 9]; 
  // const notes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+ // const notes = [4, 6, 8, 9, 11, 13]; 
+ // const notes2 = [-5, -3, -2,  0, 2, 3]; 
+ // const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
 // diatonic scales 
-  const notes = [4, 6, 8, 9, 11, 13]; 
-  const notes2 = [-5, -3, -2,  0, 2, 3]; 
-  const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
+  const notes = [6, 8, 9, 11, 13, 14]; 
+  const notes2 = [-4, -3, -1,  1, 2, 4]; 
+  const notes3 = [-15 ,-13, -11, -10, -8 , -6]; 
+  const drumNotes = [-50, ]
 
    // const notes3 = [-8, -5, -3 ,0, 2, 4,  7, 9, 12, 14, 16, 19]; 
 
   let randomArray = [];
   let randomArray2 = [];
   let randomArray3 = [];
+  let randomHiHatArray = [];
+  let randomDrumArray = [];
+
   function createRandomness() {
-    for (var i = 0; i < 16; i += 1) {
+    
+    for (var i = 0; i < 8; i += 1) {
 
       const randomNote = () => notes[Math.random() * notes.length | 0]; 
   
@@ -150,22 +164,51 @@ Tone.Transport.bpm.value = 60;
       randomArray.push(random);
   
   
-      const randomNote2 = () => notes[Math.random() * notes2.length | 0]; // the bitwise Or does the same as Math.floor
+      const randomNote2 = () => notes2[Math.random() * notes2.length | 0]; // the bitwise Or does the same as Math.floor
      let random2 = freq(randomNote2());
      randomArray2.push(random2);
   
-     const randomNote3 = () => notes[Math.random() * notes3.length | 0]; // the bitwise Or does the same as Math.floor
+     const randomNote3 = () => notes3[Math.random() * notes3.length | 0]; // the bitwise Or does the same as Math.floor
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
+     
+     // creating a random rhythm
+     function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+     let random4 = getRandomInt(10)
+     let random5 = getRandomInt(14)
+
+      if (random4 > 4)
+      randomHiHatArray.push((random + " " + random2).split(" "));
+      if (random4 == 1)
+      randomHiHatArray.push((random3 + " " + random3 + " " + random3).split(" "));
+      else
+      randomHiHatArray.push(random)
+
+      if (random5 > 10)
+      randomDrumArray.push(("C1 C1").split(" "));
+      if (random5 == 1)
+      randomDrumArray.push(("C1 C1 C1").split(" "));
+      if (random5 > 8)
+      randomDrumArray.push("F3");
+      else
+      randomDrumArray.push("C1")
 
   };
 
-  console.log(randomArray);
 
-  
+  console.log(randomDrumArray);
+
+
+
   }
 
 
+
+
+
+// ["C1", "C1", "E4", ["C2", "C2"], "C1", "C1", "F2", "F2"]
 
 /// DiffCam Variables:
 
@@ -416,14 +459,17 @@ function capture() {
             xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
             //var normXvalue = 
-            console.log(((xValue / 10) * -1) + 1);
+            //console.log(((xValue / 10) * -1) + 1);
             pitchShift.pitch = Math.floor(xValue / 2);
             phaser.frequency.value = xValue;
             pingPong.feedback.value = xValue / 10;
             synth6.envelope.attack = xValue / 10;
-            synth.envelope.attack = xValue / 10;
+            //synth.envelope.attack = xValue / 10;
             synth2.envelope.attack = xValue / 10;
             synth3.envelope.attack = xValue / 10;
+            //synth.envelope.release = xValue / 10;
+            synth2.envelope.release = xValue / 10;
+            synth3.envelope.release = xValue / 10;
             //phaser.baseFrequency.rampTo(xValue, 0.2);
 			}
         }
@@ -582,9 +628,10 @@ function requestWebcam() {
 }
 function initSuccess(requestedStream) {
     const seq = new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, 0.3, time);
+        synth.triggerAttackRelease(note, 1, time);
         // subdivisions are given as subarrays
     }, randomArray).start(0);
+    seq.playbackRate = 0.5;
 
     const seq2 = new Tone.Sequence((time, note) => {
        synth2.triggerAttackRelease(note, 0.3, time);
@@ -595,6 +642,14 @@ function initSuccess(requestedStream) {
        synth3.triggerAttackRelease(note, 0.3, time);
        // subdivisions are given as subarrays
    }, randomArray3).start(0);
+
+   const pattern6 = new Tone.Sequence(function(time, note){
+    synth6.triggerAttackRelease(note, 0.9);
+    }, randomHiHatArray).start();
+  
+    const pattern5 = new Tone.Sequence(function(time, note){
+    synth5.triggerAttackRelease(note, 0.9);
+    }, randomDrumArray).start();
     
     Tone.start();
     Tone.Transport.start();
