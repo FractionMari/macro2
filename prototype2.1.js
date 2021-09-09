@@ -92,17 +92,35 @@ freeverb.dampening = 1000;
       });
 
     const synth5 = new Tone.MembraneSynth().connect(gainNode);
+    const synth6 = new Tone.MetalSynth({
+        envelope: {
+            attack: 0.9,
+            decay: 0.6,
+            sustain: 0.4,
+            release: 0.5,
+          },
+       volume: -6
+    }
+    ).connect(gainNode);
 
-    var pattern5 = new Tone.Pattern(function(time, note){
+    var pattern6 = new Tone.Sequence(function(time, note){
+        synth6.triggerAttackRelease(note, 0.9);
+    }, ["E1", ["0", "F1"]]);
+    pattern6.start();
+
+
+    var pattern5 = new Tone.Sequence(function(time, note){
         synth5.triggerAttackRelease(note, 0.9);
-    }, ["C1", ["C1", "C1", "C1"], "E4", ["C3", "C3"], "C1", "C1", "F2", "F2"]);
+    }, ["C1", "C1", "E4", ["C2", "C2"], "C1", "C1", "F2", "F2"]);
     pattern5.start();
-    pattern5.mute = false;
-//["C1", ["C1", "C1", "C1"], "E4", ["C3", "C3"], "C1", "C1", "F2", "F2"]
+    pattern5.mute = true;
+
+
+
     gainNode.gain.value = 0.5;
     
 
-Tone.Transport.bpm.value = 120;
+Tone.Transport.bpm.value = 60;
 
 
 
@@ -392,10 +410,14 @@ function capture() {
             xValue = filterScale(xValue);
             // This is where any value can be controlled by the number "i".
             //var normXvalue = 
-            console.log(xValue / 10);
+            console.log(((xValue / 10) * -1) + 1);
             pitchShift.pitch = Math.floor(xValue / 2);
             phaser.frequency.value = xValue;
             pingPong.feedback.value = xValue / 10;
+            synth6.envelope.attack = xValue / 10;
+            synth.envelope.attack = xValue / 10;
+            synth2.envelope.attack = xValue / 10;
+            synth3.envelope.attack = xValue / 10;
             //phaser.baseFrequency.rampTo(xValue, 0.2);
 			}
         }
