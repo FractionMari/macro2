@@ -31,16 +31,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     
     ///////// TONE.JS VARIABLES ///////////
     const gainNode = new Tone.Gain().toDestination();
+
     const pingPong = new Tone.PingPongDelay().connect(gainNode);
-    const pitchShift = new Tone.PitchShift().connect(gainNode);
-    const freeverb = new Tone.Reverb().connect(gainNode);
-freeverb.dampening = 1000;
-    const phaser = new Tone.Phaser({
-      frequency: 15,
-      octaves: 2,
-      baseFrequency: 300
-    }).connect(gainNode);
+
+    pingPong.wet.value = 0.2;
+    const reverb = new Tone.Reverb().connect(pingPong);
+    reverb.dampening = 1000;
+
+    reverb.wet.value = 0.8;
+    const autoWah = new Tone.AutoWah({
+        frequency: 200,
+        baseFrequency: 440,
+        wet: 0.3,
+        gain: 0.1,
+    }).connect(reverb);
+
+    // bass
+    const synth0 = new Tone.AMSynth({
+        volume: -9,
+        oscillator: {
+          type: "sine9"
+        },
+    });
+
+    // harmony
     const synth = new Tone.DuoSynth({
+        volume: -19,
         voice0: {
             oscillator: {
                 type: "fmsawtooth",
@@ -71,6 +87,7 @@ freeverb.dampening = 1000;
 
       })
     const synth2 = new Tone.Synth({
+        volume: -9,
         oscillator: {
           type: "sine3"
         },
@@ -88,11 +105,34 @@ freeverb.dampening = 1000;
           baseFrequency: 300,
           octaves: 4
         } */
-      })
+      });
   //  const synth3 = new Tone.PluckSynth();
     const synth3 = new Tone.Synth({
+        volume: -9,
         oscillator: {
           type: "sine6"
+        },
+        envelope: {
+          attack: 0.1,
+          decay: 0.3,
+          sustain: 0.4,
+          release: 0.5,
+        }/* ,
+        filterEnvelope: {
+          attack: 0.001,
+          decay: 0.7,
+          sustain: 0.1,
+          release: 0.8,
+          baseFrequency: 300,
+          octaves: 4
+        } */
+      });
+
+      // melody synth: 
+      const synth4 = new Tone.Synth({
+        volume: 1,
+        oscillator: {
+            type: "sine7"
         },
         envelope: {
           attack: 0.1,
@@ -119,14 +159,16 @@ freeverb.dampening = 1000;
           },
        volume: -7
     }).connect(gainNode);
+
+    // Hi hat:
     const synth6 = new Tone.MetalSynth({
         envelope: {
-            attack: 0.9,
-            decay: 0.6,
-            sustain: 0.4,
-            release: 0.5,
+            attack: 0.1,
+            decay: 0.2,
+            sustain: 0.1,
+            release: 0.1,
           },
-       volume: -7
+       volume: -15,
     }
     ).connect(gainNode);
 
@@ -134,7 +176,7 @@ freeverb.dampening = 1000;
     gainNode.gain.value = 0.5;
     
 
-Tone.Transport.bpm.value = 40;
+//Tone.Transport.bpm.value = 40;
 
 
 
@@ -152,13 +194,23 @@ Tone.Transport.bpm.value = 40;
  // const notes2 = [-5, -3, -2,  0, 2, 3]; 
  // const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
 // diatonic scales 
-  const notes3 = [6, 8, 9, 11, 13, 14]; 
-  const notes2 = [-4, -3, -1,  1, 2, 4]; 
-  const notes = [-15 ,-13, -11, -10, -8 , -6]; 
+const notes3 = [6, 8, 9, 11, 13, 14]; 
+const notes2 = [-4, -3, -1,  1, 2, 4]; 
+const notes = [-18, -16, -15 ,-13, -11, -10, -8 , -6]; 
 
-    const pentaNotes = [4, 7, 9, 12, 14, 16]; 
-    const pentaNotes2 = [-5 , -3, 0,  4, 7, 9]; 
-    const pentaNotes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+const notes3_1 = [5, 7, 8, 10, 12, 13]; 
+const notes2_1 = [-5, -4, -2,  0, 1, 3]; 
+const notes_1 = [-19, -17, -16 ,-14, -12, -11, -9 , -7]; 
+
+const pentaNotes3 = [4, 7, 9, 12, 14, 16]; 
+const pentaNotes2 = [-7, -5 , -3, 0,  2, 4, 7]; 
+const pentaNotes = [-19, -17, -15, -12 ,-10, -7, -5, -3 ,0]; 
+
+const wholeNotes3 = [10, 12, 14, 16, 18, 20]; 
+const wholeNotes2 = [-2 , 0, 2,  4, 6, 8]; 
+const wholeNotes = [-20 ,-18, -16, -14, -12 ,-10]; 
+
+
 
 
 
@@ -169,53 +221,118 @@ Tone.Transport.bpm.value = 40;
   let randomArray3 = [];
   let randomHiHatArray = [];
   let randomDrumArray = [];
+  let randomMelodyArray = [];
      // creating a random rhythm
      function getRandomInt(max) {
         return Math.floor(Math.random() * max);
       }
-      let random0 = getRandomInt(16)
-      let randomScale = getRandomInt(2)
+      const random0 = getRandomInt(15) + 2;
+      const randomScale = getRandomInt(4);
+      const randomTimbre = getRandomInt(4);
+      const randomTempo = getRandomInt(5);
+
+      if (randomTimbre == 0) 
+      synth4.oscillator.type = "fmsine";
+      if (randomTimbre == 1) 
+      synth4.oscillator.type = "pwm";
+      if (randomTimbre == 2) 
+      synth4.oscillator.type = "pulse";
+      else
+      synth4.oscillator.type = "amsawtooth4";
+      console.log(randomTimbre, synth4.oscillator.type);
+
+      if (randomTempo == 0) 
+      Tone.Transport.bpm.value = 40;
+      if (randomTempo == 1) 
+      Tone.Transport.bpm.value = 40;
+      if (randomTempo == 2) 
+      Tone.Transport.bpm.value = 80;
+      if (randomTempo == 3) 
+      Tone.Transport.bpm.value = 120;
+      if (randomTempo == 4) 
+      Tone.Transport.bpm.value = 60;
+
 
       document.getElementById("timeSign").innerHTML =
       "Time signature: " + random0 + " / 16";
 
+      document.getElementById("tempo").innerHTML =
+      "BPM: " + Tone.Transport.bpm.value;
+
+      let scaleNotes = [];
+      let scaleNotes2 = [];
+      let scaleNotes3 = [];
+
+      if (randomScale == 0)
+      scaleNotes = pentaNotes,
+      scaleNotes2 = pentaNotes2,
+      scaleNotes3 = pentaNotes3,
+      document.getElementById("scale").innerHTML =
+      "Scale: pentatone";
+      if (randomScale == 1)
+      scaleNotes = wholeNotes,
+      scaleNotes2 = wholeNotes2,
+      scaleNotes3 = wholeNotes3,
+      document.getElementById("scale").innerHTML =
+      "Scale: wholetone";
+      if (randomScale == 2)
+      scaleNotes = notes_1,
+      scaleNotes2 = notes2_1,
+      scaleNotes3 = notes3_1,
+      document.getElementById("scale").innerHTML =
+      "Scale: diatonic2";
+      else
+      scaleNotes = notes,
+      scaleNotes2 = notes2,
+      scaleNotes3 = notes3,
+      document.getElementById("scale").innerHTML =
+      "Scale: diatonic";
+      console.log(random0);
+      console.log(randomScale);
+
+
+
+
   function createRandomness() {
 
-   // if (randomScale == 0)
     
     for (var i = 0; i < random0; i += 1) {
 
-      const randomNote = () => notes[Math.random() * notes.length | 0]; 
+      const randomNote = () => scaleNotes[Math.random() * scaleNotes.length | 0]; 
   
       let random = freq(randomNote());
       randomArray.push(random);
   
   
-      const randomNote2 = () => notes2[Math.random() * notes2.length | 0]; // the bitwise Or does the same as Math.floor
+      const randomNote2 = () => scaleNotes2[Math.random() * scaleNotes2.length | 0]; 
      let random2 = freq(randomNote2());
      randomArray2.push(random2);
   
-     const randomNote3 = () => notes3[Math.random() * notes3.length | 0]; // the bitwise Or does the same as Math.floor
+     const randomNote3 = () => scaleNotes3[Math.random() * scaleNotes3.length | 0]; 
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
      
 
-     let random4 = getRandomInt(10)
-     let random5 = getRandomInt(14)
+     let random4 = getRandomInt(10);
+     let random5 = getRandomInt(14);
+     let randomMelody = getRandomInt(14);
 
       if (random4 > 4)
-      randomHiHatArray.push((random + " " + random2).split(" "));
+      randomHiHatArray.push(("C1 C1").split(" ")),
+      randomMelodyArray.push(random);
       if (random4 == 1)
-      randomHiHatArray.push((random3 + " " + random3 + " " + random3).split(" "));
+      randomHiHatArray.push(("C1 C1").split(" ")),
+      randomMelodyArray.push((0 + " " + random).split(" "));
       else
-      randomHiHatArray.push(random)
+      randomHiHatArray.push("C1"),
+      randomMelodyArray.push((random + " " + random + " " + random).split(" "));
 
       if (random5 > 10)
       randomDrumArray.push(("C1 C1").split(" "));
       if (random5 == 1)
       randomDrumArray.push(("C1 C1 C1").split(" "));
       if (random5 > 8)
-      randomDrumArray.push("F3");
+      randomDrumArray.push("F2");
       else
       randomDrumArray.push("C1")
 
@@ -470,11 +587,16 @@ function capture() {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
                 //console.log(score * 10)
-               // let tempo = i;
-               //console.log(tempo);
+              //  let tempo = ((i * -1) + 240) / 4 + 40;
+              // console.log(tempo);
 
-                //Tone.Transport.bpm.rampTo(tempo, 0.5);
+           // Tone.Transport.bpm.rampTo(tempo, 0.5);
+           // document.getElementById("tempo").innerHTML =
+           // "Tempo: " + tempo + " BPM";
 			// A simple volume control:
+// xValue er egentlig y-aksen, bestemmer hvilket punkt på linjen
+
+// pixelDiff er mye bevegelse
 
 
             var xValue = (i * (-1)) + 249;	
@@ -484,17 +606,19 @@ function capture() {
             // This is where any value can be controlled by the number "i".
             //var normXvalue = 
             //console.log(((xValue / 10) * -1) + 1);
-            pitchShift.pitch = Math.floor(xValue / 2);
-            phaser.frequency.value = xValue;
+            //
+            autoWah.octaves = xValue / 4;
+
+            autoWah.Q.value = 8;
             pingPong.feedback.value = xValue / 10;
-            synth6.envelope.attack = xValue / 10;
+            //synth6.envelope.attack = xValue / 10;
             //synth.envelope.attack = xValue / 10;
             synth2.envelope.attack = xValue / 10;
             synth3.envelope.attack = xValue / 10;
             //synth.envelope.release = xValue / 10;
             synth2.envelope.release = xValue / 10;
             synth3.envelope.release = xValue / 10;
-            //phaser.baseFrequency.rampTo(xValue, 0.2);
+            //autoWah.baseFrequency.rampTo(xValue, 0.2);
 			}
         }
 
@@ -542,7 +666,8 @@ function capture() {
 
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 28)
-                synth.connect(freeverb),
+                synth.connect(autoWah),
+                synth0.connect(autoWah),
                 document.getElementById("synth1on").innerHTML =
                 "Synth 1: on",
                 document.getElementById("synth1on0").innerHTML =
@@ -551,7 +676,8 @@ function capture() {
                 "1";
                   
             else if (i == 24)
-                synth.disconnect(freeverb),
+                synth.disconnect(autoWah),
+                synth0.disconnect(autoWah),
                 document.getElementById("synth1on").innerHTML =
                 "Synth 1: off",
                 document.getElementById("synth1on0").innerHTML =
@@ -561,7 +687,8 @@ function capture() {
 
 
             else if (i == 20)
-                synth2.connect(freeverb),
+                synth2.connect(autoWah),
+                synth3.connect(autoWah),
                 document.getElementById("synth2on").innerHTML =
                 "Synth 2: on",
                 document.getElementById("synth2on0").innerHTML =
@@ -570,7 +697,8 @@ function capture() {
                 "1";
 
              else if (i == 16)
-                synth2.disconnect(freeverb),
+                synth2.disconnect(autoWah),
+                synth3.disconnect(autoWah),
                 document.getElementById("synth2on").innerHTML =
                 "Synth 2: off",
                 document.getElementById("synth2on0").innerHTML =
@@ -579,18 +707,18 @@ function capture() {
                 "";
 
             else if (i == 12)
-                synth3.connect(freeverb),
+                synth4.connect(autoWah),
                 document.getElementById("synth3on").innerHTML =
-                "Synth 3: on",
+                "Melody: on",
                 document.getElementById("synth3on0").innerHTML =
                 "",
                 document.getElementById("synth3on1").innerHTML =
                 "1";
 
             else if (i == 8)
-                synth3.disconnect(freeverb),
+                synth4.disconnect(autoWah),
                 document.getElementById("synth3on").innerHTML =
-                "Synth 3: off",
+                "Melody: off",
                 document.getElementById("synth3on0").innerHTML =
                 "0",
                 document.getElementById("synth3on1").innerHTML =
@@ -680,6 +808,13 @@ function requestWebcam() {
         
 }
 function initSuccess(requestedStream) {
+
+    const seq0 = new Tone.Sequence((time, note) => {
+        synth0.triggerAttackRelease(note, 2, time);
+        // subdivisions are given as subarrays
+    }, randomArray).start(0);
+    seq0.playbackRate = 0.5;
+    
     const seq = new Tone.Sequence((time, note) => {
         synth.triggerAttackRelease(note, 2, time);
         // subdivisions are given as subarrays
@@ -687,14 +822,19 @@ function initSuccess(requestedStream) {
     seq.playbackRate = 0.5;
 
     const seq2 = new Tone.Sequence((time, note) => {
-       synth2.triggerAttackRelease(note, 0.3, time);
+       synth2.triggerAttackRelease(note, 0.8, time);
        // subdivisions are given as subarrays
    }, randomArray2).start(0);
 
    const seq3 = new Tone.Sequence((time, note) => {
-       synth3.triggerAttackRelease(note, 0.3, time);
+       synth3.triggerAttackRelease(note, 0.8, time);
        // subdivisions are given as subarrays
    }, randomArray3).start(0);
+
+   const seq4 = new Tone.Sequence((time, note) => {
+    synth4.triggerAttackRelease(note, 0.3, time);
+    // subdivisions are given as subarrays
+}, randomMelodyArray).start(0);
 
    const pattern6 = new Tone.Sequence(function(time, note){
     synth6.triggerAttackRelease(note, 0.9);
@@ -703,6 +843,8 @@ function initSuccess(requestedStream) {
     const pattern5 = new Tone.Sequence(function(time, note){
     synth5.triggerAttackRelease(note, 0.9);
     }, randomDrumArray).start();
+
+    
     
     Tone.start();
     Tone.Transport.start();

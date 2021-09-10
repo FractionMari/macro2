@@ -5,6 +5,19 @@
   font-size: 40px;
 }
 
+#tempo {
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  font-size: 40px;
+}
+
+#scale {
+  position: absolute;
+  top: 100px;
+  right: 0px;
+  font-size: 40px;
+}
 #synth1on1 {
   position: absolute;
   top: 335px;
