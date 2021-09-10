@@ -1,3 +1,49 @@
+#timeSign {
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  font-size: 40px;
+}
+
+#synth1on1 {
+  position: absolute;
+  top: 335px;
+  left: 135px;
+  font-size: 100px;
+}
+#synth1on0 {
+  position: absolute;
+  top: 335px;
+  left: 240px;
+  font-size: 100px;
+}
+
+
+#synth2on1 {
+  position: absolute;
+  top: 335px;
+  left: 355px;
+  font-size: 100px;
+}
+#synth2on0 {
+  position: absolute;
+  top: 335px;
+  left: 460px;
+  font-size: 100px;
+}
+
+#synth3on1 {
+  position: absolute;
+  top: 335px;
+  left: 575px;
+  font-size: 100px;
+}
+#synth3on0 {
+  position: absolute;
+  top: 335px;
+  left: 680px;
+  font-size: 100px;
+}
 body {
 	margin: 20px;
   font: 1.5em/1.2 sans-serif;
@@ -5,7 +51,7 @@ body {
   font-weight: 900;
 	text-align: center;
   background-color: black;
-  color: #ff00dd; 
+  color: #00ff00; 
 }
 
 figure {
@@ -44,6 +90,19 @@ video, canvas {
   margin: auto;
   display: block;
   text-align: left;
+  size: 20px;
+
+}
+
+.monitoring {
+  position: absolute;
+  top: 0;
+  width: 900px;
+  height: 500px;
+  padding: 0;
+  margin: auto;
+  display: block;
+  text-align: left;
 
 }
 
@@ -51,10 +110,11 @@ video, canvas {
   position: absolute;
   top: 0;
   left: 0;
+
 }
 
 button {
-  background-color: #ff00dd;
+  background-color: #00ff00; 
   border-radius: 50px;
   color: white;
   padding: 15px 32px;
@@ -71,7 +131,7 @@ button.active {
 
 button:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #mute {
@@ -89,13 +149,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #playAudio2:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 
@@ -110,13 +170,13 @@ button:hover {
     font-size:20px;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #playAudio3:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #effect1 {
@@ -131,13 +191,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #effect1:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #effect1 {
@@ -152,13 +212,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #effect1:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #effect2 {
@@ -173,13 +233,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #effect2:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #effect3 {
@@ -194,13 +254,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #effect3:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 #effect4 {
@@ -215,13 +275,13 @@ button:hover {
     font-weight: 900;
     padding: 5px 5px;
     text-align:start;
-    background-color: #ff00dd;
+    background-color: #00ff00; 
     color: #ffffff;
 }
 
 #effect4:hover {
   background-color: #333;
-  color: #ff00dd;
+  color: #00ff00; 
 }
 
 
@@ -251,7 +311,7 @@ button:hover {
   max-width:300px;
   height: auto;
   background: rgb(0, 0, 0);
-  color: #ff00dd;
+  color: #00ff00; 
   background-size: cover;
 }
   
@@ -282,7 +342,7 @@ button:hover {
 }
 
 .topnav a.active {
-  background-color: rgb(197, 95, 184);
+  background-color: #00ff00; 
   color: white;
 }
     
@@ -307,7 +367,7 @@ button:hover {
     vertical-align: middle;
     width: 15%; /* Full-width */
     height: 25px; /* Specified height */
-    background: #ff00dd; /* Grey background */
+    background: #00ff00;  /* Grey background */
     outline: none; /* Remove outline */
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     border-radius: 50px;

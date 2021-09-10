@@ -41,23 +41,34 @@ freeverb.dampening = 1000;
       baseFrequency: 300
     }).connect(gainNode);
     const synth = new Tone.DuoSynth({
-        oscillator: {
-          type: "sine2"
+        voice0: {
+            oscillator: {
+                type: "fmsawtooth",
+
+              },
+            envelope: {
+                attack: 0.9,
+                decay: 0.3,
+                sustain: 1,
+                release: 0.9,
+            },
+            filter: {
+                Q: 17,
+                frequency: 850,
+
+            },
         },
-        envelope: {
-            attack: 0.1,
-            decay: 0.3,
-            sustain: 1,
-            release: 0.5,
+
+        voice1: {
+            oscillator: {
+                type: "pulse",
+
+              },
+
         },
-        filterEnvelope: {
-            attack: 0.01,
-            decay: 0.7,
-            sustain: 0.1,
-            release: 0.8,
-            baseFrequency: 300,
-            octaves: 4
-          }
+
+
+
       })
     const synth2 = new Tone.Synth({
         oscillator: {
@@ -123,7 +134,7 @@ freeverb.dampening = 1000;
     gainNode.gain.value = 0.5;
     
 
-Tone.Transport.bpm.value = 60;
+Tone.Transport.bpm.value = 40;
 
 
 
@@ -141,10 +152,15 @@ Tone.Transport.bpm.value = 60;
  // const notes2 = [-5, -3, -2,  0, 2, 3]; 
  // const notes3 = [-15 ,-13, -12, -10, -8 , -7]; 
 // diatonic scales 
-  const notes = [6, 8, 9, 11, 13, 14]; 
+  const notes3 = [6, 8, 9, 11, 13, 14]; 
   const notes2 = [-4, -3, -1,  1, 2, 4]; 
-  const notes3 = [-15 ,-13, -11, -10, -8 , -6]; 
-  const drumNotes = [-50, ]
+  const notes = [-15 ,-13, -11, -10, -8 , -6]; 
+
+    const pentaNotes = [4, 7, 9, 12, 14, 16]; 
+    const pentaNotes2 = [-5 , -3, 0,  4, 7, 9]; 
+    const pentaNotes3 = [-13 ,-10, -8, -5, -3 ,0]; 
+
+
 
    // const notes3 = [-8, -5, -3 ,0, 2, 4,  7, 9, 12, 14, 16, 19]; 
 
@@ -153,10 +169,21 @@ Tone.Transport.bpm.value = 60;
   let randomArray3 = [];
   let randomHiHatArray = [];
   let randomDrumArray = [];
+     // creating a random rhythm
+     function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+      let random0 = getRandomInt(16)
+      let randomScale = getRandomInt(2)
+
+      document.getElementById("timeSign").innerHTML =
+      "Time signature: " + random0 + " / 16";
 
   function createRandomness() {
+
+   // if (randomScale == 0)
     
-    for (var i = 0; i < 8; i += 1) {
+    for (var i = 0; i < random0; i += 1) {
 
       const randomNote = () => notes[Math.random() * notes.length | 0]; 
   
@@ -172,10 +199,7 @@ Tone.Transport.bpm.value = 60;
      let random3 = freq(randomNote3());
      randomArray3.push(random3);
      
-     // creating a random rhythm
-     function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-      }
+
      let random4 = getRandomInt(10)
      let random5 = getRandomInt(14)
 
@@ -446,10 +470,10 @@ function capture() {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);	
 				}
                 //console.log(score * 10)
-        //        let tempo = i;
-        //        console.log(tempo);
+               // let tempo = i;
+               //console.log(tempo);
 
-        //        Tone.Transport.bpm.rampTo(tempo, 0.5);
+                //Tone.Transport.bpm.rampTo(tempo, 0.5);
 			// A simple volume control:
 
 
@@ -520,28 +544,57 @@ function capture() {
             if (i == 28)
                 synth.connect(freeverb),
                 document.getElementById("synth1on").innerHTML =
-                "Synth 1: on";
+                "Synth 1: on",
+                document.getElementById("synth1on0").innerHTML =
+                "",
+                document.getElementById("synth1on1").innerHTML =
+                "1";
                   
             else if (i == 24)
-                synth2.connect(freeverb),
-                document.getElementById("synth2on").innerHTML =
-                "Synth 2: on";
-            else if (i == 20)
-                synth3.connect(freeverb),
-                document.getElementById("synth3on").innerHTML =
-                "Synth 3: on";
-             else if (i == 16)
                 synth.disconnect(freeverb),
                 document.getElementById("synth1on").innerHTML =
-                "Synth 1: off";
-            else if (i == 12)
+                "Synth 1: off",
+                document.getElementById("synth1on0").innerHTML =
+                "0",
+                document.getElementById("synth1on1").innerHTML =
+                "";
+
+
+            else if (i == 20)
+                synth2.connect(freeverb),
+                document.getElementById("synth2on").innerHTML =
+                "Synth 2: on",
+                document.getElementById("synth2on0").innerHTML =
+                "",
+                document.getElementById("synth2on1").innerHTML =
+                "1";
+
+             else if (i == 16)
                 synth2.disconnect(freeverb),
                 document.getElementById("synth2on").innerHTML =
-                "Synth 2: off";
+                "Synth 2: off",
+                document.getElementById("synth2on0").innerHTML =
+                "0",
+                document.getElementById("synth2on1").innerHTML =
+                "";
+
+            else if (i == 12)
+                synth3.connect(freeverb),
+                document.getElementById("synth3on").innerHTML =
+                "Synth 3: on",
+                document.getElementById("synth3on0").innerHTML =
+                "",
+                document.getElementById("synth3on1").innerHTML =
+                "1";
+
             else if (i == 8)
                 synth3.disconnect(freeverb),
                 document.getElementById("synth3on").innerHTML =
-                "Synth 3: off";
+                "Synth 3: off",
+                document.getElementById("synth3on0").innerHTML =
+                "0",
+                document.getElementById("synth3on1").innerHTML =
+                "";
 
 			}
         }
@@ -628,7 +681,7 @@ function requestWebcam() {
 }
 function initSuccess(requestedStream) {
     const seq = new Tone.Sequence((time, note) => {
-        synth.triggerAttackRelease(note, 1, time);
+        synth.triggerAttackRelease(note, 2, time);
         // subdivisions are given as subarrays
     }, randomArray).start(0);
     seq.playbackRate = 0.5;
