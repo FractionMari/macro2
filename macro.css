@@ -20,13 +20,13 @@
 }
 #synth1on1 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 135px;
   font-size: 100px;
 }
 #synth1on0 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 240px;
   font-size: 100px;
 }
@@ -34,26 +34,26 @@
 
 #synth2on1 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 355px;
   font-size: 100px;
 }
 #synth2on0 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 460px;
   font-size: 100px;
 }
 
 #synth3on1 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 575px;
   font-size: 100px;
 }
 #synth3on0 {
   position: absolute;
-  top: 335px;
+  top: 305px;
   left: 680px;
   font-size: 100px;
 }
@@ -93,6 +93,7 @@ video, canvas {
   margin: auto;
   display: block;
   background-color: #333;
+
 }
 
 .wrapper {
@@ -109,7 +110,7 @@ video, canvas {
 
 .monitoring {
   position: absolute;
-  top: 0;
+  top: 30px;
   width: 900px;
   height: 500px;
   padding: 0;
@@ -337,6 +338,7 @@ button:hover {
 .topnav {
   overflow: hidden;
   background-color: #333;
+  z-index: 2;
 }
     
 .topnav a {

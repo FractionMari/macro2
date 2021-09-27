@@ -239,7 +239,7 @@ const wholeNotes = [-20 ,-18, -16, -14, -12 ,-10];
       synth4.oscillator.type = "pulse";
       else
       synth4.oscillator.type = "amsawtooth4";
-      console.log(randomTimbre, synth4.oscillator.type);
+      //console.log(randomTimbre, synth4.oscillator.type);
 
       if (randomTempo == 0) 
       Tone.Transport.bpm.value = 40;
@@ -287,8 +287,8 @@ const wholeNotes = [-20 ,-18, -16, -14, -12 ,-10];
       scaleNotes3 = notes3,
       document.getElementById("scale").innerHTML =
       "Scale: diatonic";
-      console.log(random0);
-      console.log(randomScale);
+      //console.log(random0);
+      //console.log(randomScale);
 
 
 
@@ -339,7 +339,7 @@ const wholeNotes = [-20 ,-18, -16, -14, -12 ,-10];
   };
 
 
-  console.log(randomDrumArray);
+  //console.log(randomDrumArray);
 
 
 
@@ -568,10 +568,12 @@ function capture() {
 		var score = 0;
 		var motionPixels = includeMotionPixels ? [] : undefined;
         var motionBox = undefined;
-      
+        console.log(diffImageData);
 		for (var i = 0; i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
-			var normalized = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));         
+			var normalized = Math.min(255, pixelDiff * (50 / pixelDiffThreshold)); 
+            
+
 			rgba[i] = 0;
 			rgba[i + 1] = 0;
             rgba[i + 2] = normalized;
@@ -597,7 +599,12 @@ function capture() {
 // xValue er egentlig y-aksen, bestemmer hvilket punkt på linjen
 
 // pixelDiff er mye bevegelse
+// i er y-koordinaten
 
+
+
+// Score er hvor raskt en beveger seg
+//console.log(score);
 
             var xValue = (i * (-1)) + 249;	
             // Scaling the number with generateScaleFunction
@@ -661,7 +668,6 @@ function capture() {
 			// using the x coords to change pitch
 
             // A function for activation of notes:
-//console.log(i);
 
 
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5

@@ -274,7 +274,7 @@ function capture() {
             var pitchValue = Math.floor(((i * (-1)) + 126) / 12.6);
           // console.log(pitchValue); 
            var frequency = getFrequency3(pitchValue, 2);
-           console.log(frequency);
+          // console.log(frequency);
            synth.frequency.value = frequency;
            synth.harmonicity.value = xValue * (-1);
 /*             if (score > 4)
@@ -336,7 +336,8 @@ function capture() {
             // This function ouputs value 0-7:
 			xValue2 = (((i * (-1)) + 40) / 4) - 3;
 
-           // console.log(score);
+            console.log(coords.x);
+            console.log(i);
 
 
             
