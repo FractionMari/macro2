@@ -55,6 +55,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     phaser.wet.value = 0.25;
     shift.wet.value = 0.25;
 
+    // deafault synth:
     let synth = new Tone.MonoSynth({
         oscillator: {
             type: "sine2"
@@ -67,243 +68,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
         }
     }).connect(gainSynth1);
 
-
-
-    /// Yellow line of synths:
-  //  const synth5 = new Tone.FMSynth().connect(gainSynth2);
-    let synth2 = new Tone.MonoSynth({
-        oscillator: {
-            type: "sine2"
-        },
-        envelope: {
-            attack: 0.5,
-            decay: 0.3,
-            sustain: 1.0,
-            release: 0.8
-        }
-    }).connect(gainSynth2);
-
-/*     let synth6 = new Tone.Sampler({
-        urls: {
-            A1: "A1.mp3",
-            A2: "A2.mp3",
-        },
-        baseUrl: "https://tonejs.github.io/audio/casio/",
-   
-    }); */
-
-/*     const synth6 = new Tone.Sampler({
-        urls: {
-            A1: "piano1.mp3",
-            A2: "piano2.mp3",
-        },
-        baseUrl: "samples/",
-   
-    }); */
-/*     let synth7 = new Tone.MembraneSynth({
-        detune : 0.9,
-        pitchDecay : 0.8,
-        volume : 0.1
-    });
-    let synth8 = new Tone.DuoSynth(); */
-
-/*     const player = new Tone.Player("https://tonejs.github.io/audio/drum-samples/breakbeat.mp3").toMaster(); */
-    
-    
-
-////////////////////////////////////////////////////////////////////////
-////////// INTERACTING with HTML file //////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-
-document.getElementById("effect1").addEventListener("click", function(){
-
-    
-  if(this.className == 'is-playing'){
-    this.className = "";
-    this.innerHTML = "Phaser: OFF";
-    gainSynth1.disconnect(phaser);
-    gainSynth2.disconnect(phaser);
+    // scale select variable:
+    let scaleSelect = ["C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"];
 
   
-}else{
-    this.className = "is-playing";
-    this.innerHTML = "Phaser: ON";
-    gainSynth1.connect(phaser);
-    gainSynth2.connect(phaser);
-
-  }
-
-});
-
-document.getElementById("effect2").addEventListener("click", function(){
-
-    
-    if(this.className == 'is-playing'){
-      this.className = "";
-      this.innerHTML = "PingPong: OFF";
-      gainSynth1.disconnect(pingPong);
-      gainSynth2.disconnect(pingPong);
-  
-    
-  }else{
-      this.className = "is-playing";
-      this.innerHTML = "PingPong: ON";
-      gainSynth1.connect(pingPong);
-      gainSynth2.connect(pingPong);
-  
-    }
-  
-  });
-
-  document.getElementById("effect3").addEventListener("click", function(){
-
-    
-    if(this.className == 'is-playing'){
-      this.className = "";
-      this.innerHTML = "Cheby: OFF";
-      gainSynth1.disconnect(cheby);
-      gainSynth2.disconnect(cheby);
-  
-    
-  }else{
-      this.className = "is-playing";
-      this.innerHTML = "Cheby: ON";
-      gainSynth1.connect(cheby);
-      gainSynth2.connect(cheby);
-  
-    }
-  
-  });
-
-  document.getElementById("effect4").addEventListener("click", function(){
-
-    
-    if(this.className == 'is-playing'){
-      this.className = "";
-      this.innerHTML = "Shift: OFF";
-      gainSynth1.disconnect(shift);
-      gainSynth2.disconnect(shift);
-  
-    
-  }else{
-      this.className = "is-playing";
-      this.innerHTML = "Shift: ON";
-      gainSynth1.connect(shift);
-      gainSynth2.connect(shift);
-  
-    }
-  
-  });
-
-
-document.getElementById("playAudio2").addEventListener("click", function(){
-    
-  if(this.className == 'is-playing'){
-    this.className = "is-playing2";
-    this.innerHTML = "Membrane Synth"
-    //
-    synth = new Tone.MembraneSynth({
-        detune : 0.1,
-        pitchDecay : 0.1,
-        volume : 0.1
-    }).connect(gainSynth1);
-
-}else if (this.className == 'is-playing2')
-        
-{
-  this.className = "is-playing3";
-  this.innerHTML = "Duo Synth";
-  synth = new Tone.DuoSynth().connect(gainSynth1)
-
-
-}else if (this.className == 'is-playing3')
-        
-{
-  this.className = "is-playing4";
-  this.innerHTML = "MUTED";
-  synth.disconnect(gainSynth1);
-
-
-}else if (this.className == 'is-playing4')
-        
-{
-  this.className = "";
-  this.innerHTML = "FM Synth";
-  synth = new Tone.FMSynth().connect(gainSynth1);
-
-
-}
-  
-  else{
-    this.className = "is-playing";
-    this.innerHTML = "Sampler Synth";
-    //
-synth =  new Tone.Sampler({
-    urls: {
-        A1: "A1.mp3",
-        A2: "A2.mp3",
-    },
-    baseUrl: "https://tonejs.github.io/audio/casio/",
-
-}).connect(gainSynth1);
-
-  }
-
-});
-document.getElementById("playAudio3").addEventListener("click", function(){
-    
-    if(this.className == 'is-playing'){
-      this.className = "is-playing2";
-      this.innerHTML = "Membrane Synth"
-      //
-      synth2 = new Tone.MembraneSynth({
-        detune : 0.1,
-        pitchDecay : 0.1,
-        volume : 0.1
-    }).connect(gainSynth2)
-  
-  }else if (this.className == 'is-playing2')
-          
-  {
-    this.className = "is-playing3";
-    this.innerHTML = "Duo Synth";
-    synth2 = new Tone.DuoSynth().connect(gainSynth2)
-  
-  
-  }else if (this.className == 'is-playing3')
-          
-  {
-    this.className = "is-playing4";
-    this.innerHTML = "MUTED";
-    synth2.disconnect(gainSynth2);
-  
-}else if (this.className == 'is-playing4')
-          
-{
-  this.className = "";
-  this.innerHTML = "FM Synth";
-  synth2 = new Tone.FMSynth().connect(gainSynth1);
-
-}
-    
-    else{
-      this.className = "is-playing";
-      this.innerHTML = "Sampler Synth";
-      //
-      synth2 = new Tone.Sampler({
-        urls: {
-            A1: "A1.mp3",
-            A2: "A2.mp3",
-        },
-        baseUrl: "https://tonejs.github.io/audio/casio/",
-
-    }).connect(gainSynth2);
-  
-  
-    }
-  
-  });
-
 
 document.getElementById("mute").addEventListener("click", function(){
    
@@ -659,52 +427,38 @@ function capture() {
             phaser.frequency.value = xValue;
             
             let chebyValue = Math.floor((xValue / 10) * 100);
-            let harmonicityValue = Math.floor((xValue / 10) * 20);
-         //   console.log(chebyValue / 100);
-           cheby.order = chebyValue;
-           shift.frequency.value = xValue * 50;
-           //synth4.harmonicity.value = chebyValue;
-           //synth8.harmonicity.value = harmonicityValue;
-           //synth7.pitchDecay = chebyValue / 100;
-           console.log(i);
-
-           if (i == 120)
-                synth.triggerAttackRelease("C2", "2n"),
-                document.getElementById("synth1on").innerHTML =
-                "C",
-                document.getElementById("synth1on1").innerHTML =
-                "1",
-
-                freq = "C";
+            cheby.order = chebyValue;
+            shift.frequency.value = xValue * 50;
 
 
-            else if (i == 104)
-                synth.triggerAttackRelease("D2", "2n"),
-                document.getElementById("synth1on").innerHTML = "D";
+           //phaser.baseFrequency.rampTo(xValue, 0.2);
+           //console.log(xValue);
+
+           if (i == 248)
+                synth.triggerAttackRelease(scaleSelect[0], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[0];
+            else if (i == 216)
+                synth.triggerAttackRelease(scaleSelect[1], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[1];
+            else if (i == 184)
+                synth.triggerAttackRelease(scaleSelect[2], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[2];
+            else if (i == 152)
+                synth.triggerAttackRelease(scaleSelect[3], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[3];
+            else if (i == 120)
+                synth.triggerAttackRelease(scaleSelect[4], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[4];
             else if (i == 88)
-                synth.triggerAttackRelease("E2", "2n"),
-                document.getElementById("synth1on").innerHTML = "E";
-            else if (i == 72)
-                synth.triggerAttackRelease("F2", "2n"),
-                document.getElementById("synth1on").innerHTML = "F";
+                synth.triggerAttackRelease(scaleSelect[5], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[5];
             else if (i == 56)
-                synth.triggerAttackRelease("G2", "2n"),
-                document.getElementById("synth1on").innerHTML = "G";
-            else if (i == 40)
-                synth.triggerAttackRelease("A2", "2n"),
-                document.getElementById("synth1on").innerHTML = "A";
-
-            else if (i == 28)
-              synth.triggerAttackRelease("B2", "2n"),
-              document.getElementById("synth1on").innerHTML = "B";
-                  
-
-            else if (i == 8)
-              synth.triggerAttackRelease("C3", "2n"),
-              document.getElementById("synth1on").innerHTML = "C";
-
-
-            //phaser.baseFrequency.rampTo(xValue, 0.2);
+                synth.triggerAttackRelease(scaleSelect[6], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[6];         
+            else if (i == 24)
+                synth.triggerAttackRelease(scaleSelect[7], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[7];
+            
 			}
         }
 
@@ -728,8 +482,8 @@ function capture() {
 
         for (var i = 0; 
             i < rgba.length; i += 4) {
-			var pixelDiff = rgba[i] * 0.9 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
-            var normalized2 = Math.min(255, pixelDiff * (50 / pixelDiffThreshold));
+			var pixelDiff = rgba[i] * 0.3 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
+            var normalized2 = Math.min(255, pixelDiff * (70 / pixelDiffThreshold));
             
 			rgba[i] = normalized2; // rød
 			rgba[i + 1] = 0; // grønn
@@ -754,30 +508,101 @@ function capture() {
 //console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 20)
-                synth.triggerAttackRelease("C2", "4n"),
-                document.getElementById("synth1on").innerHTML =
-                "Synth 1: on",
-                document.getElementById("synth1on1").innerHTML =
-                "1",
-
-                freq = "C";
+                document.getElementById("fx1on").innerHTML =
+                "on",
+                document.getElementById("fx1off").innerHTML =
+                "",
+                gainSynth1.connect(phaser);
 
 
             else if (i == 16)
-               // synth.triggerAttackRelease("D2", "4n"),
-                freq = "D";
+                document.getElementById("fx2on").innerHTML =
+                "on",
+                document.getElementById("fx2off").innerHTML =
+                "",
+                gainSynth1.connect(shift);
             else if (i == 12)
-              //  synth.triggerAttackRelease("E2", "4n"),
-                freq = "E";
+                document.getElementById("fx3on").innerHTML =
+                "on",
+                document.getElementById("fx3off").innerHTML =
+                "",
+                gainSynth1.connect(pingPong);
+
+            // instruments on:
             else if (i == 8)
-              //  synth.triggerAttackRelease("F2", "4n"),
-                freq = "F";
+            document.getElementById("instr1on").innerHTML =
+            "Synth1: on",
+            document.getElementById("instr2on").innerHTML =
+            "",
+            document.getElementById("instr3on").innerHTML =
+            "",
+                synth = new Tone.DuoSynth({
+                    volume: -19,
+                    voice0: {
+                        oscillator: {
+                            type: "fmsawtooth",
+            
+                          },
+                        envelope: {
+                            attack: 0.9,
+                            decay: 0.3,
+                            sustain: 1,
+                            release: 0.9,
+                        },
+                        filter: {
+                            Q: 17,
+                            frequency: 850,
+            
+                        },
+                    },
+            
+                    voice1: {
+                        oscillator: {
+                            type: "pulse",
+            
+                          },
+            
+                    },
+            
+            
+                  }).connect(gainSynth1);
+
             else if (i == 4)
-              //  synth.triggerAttackRelease("G2", "4n"),
-                freq = "G";
+            document.getElementById("instr2on").innerHTML =
+            "Synth2: on",
+            document.getElementById("instr1on").innerHTML =
+            "",
+            document.getElementById("instr3on").innerHTML =
+            "",
+              synth =  new Tone.Sampler({
+                urls: {
+                    A1: "A1.mp3",
+                    A2: "A2.mp3",
+                },
+                baseUrl: "https://tonejs.github.io/audio/casio/",
+            
+            }).connect(gainSynth1);
+    
             else if (i == 0)
-              //  synth.triggerAttackRelease("A2", "4n"),
-                freq = "A";
+            document.getElementById("instr3on").innerHTML =
+            "Synth3: on",
+            document.getElementById("instr2on").innerHTML =
+            "",
+            document.getElementById("instr1on").innerHTML =
+            "",
+                synth = new Tone.Synth({
+                    volume: -9,
+                    oscillator: {
+                      type: "sine6"
+                    },
+                    envelope: {
+                      attack: 0.1,
+                      decay: 0.3,
+                      sustain: 0.4,
+                      release: 0.5,
+                    }
+                  }).connect(gainSynth1);
+            
 
 			}
         }
@@ -826,24 +651,54 @@ function processDiff3(diffImageData3) {
 //console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 20)
-             //   synth2.triggerAttackRelease("E3", "4n"),
+                document.getElementById("fx1on").innerHTML =
+                "",
+                document.getElementById("fx1off").innerHTML =
+                "off",
+                gainSynth1.disconnect(phaser);
 
-                freq = "E";
+
             else if (i == 16)
-             //   synth2.triggerAttackRelease("F3", "4n"),
-                freq = "F";
+                document.getElementById("fx2on").innerHTML =
+                "",
+                document.getElementById("fx2off").innerHTML =
+                "off",
+                gainSynth1.disconnect(shift);
             else if (i == 12)
-             //   synth2.triggerAttackRelease("G3", "4n"),
-                freq = "G";
+                document.getElementById("fx3on").innerHTML =
+                "",
+                document.getElementById("fx3off").innerHTML =
+                "off",
+                gainSynth1.disconnect(pingPong);
+        
+                  
             else if (i == 8)
-             //   synth2.triggerAttackRelease("A3", "4n"),
-                freq = "A";
+            document.getElementById("scale1on").innerHTML =
+            "Pentatone scale",
+            document.getElementById("scale2on").innerHTML =
+            "",
+            document.getElementById("scale3on").innerHTML =
+            "",
+            scaleSelect = ["G1", "A1","C2", "D2", "F2", "G2", "A2","C3", "D3", "F3", "G3", "A3","C4", "D4", "F4", "G4", "A4", "C5", "D5", "F5", "G5", "A5", "C6"];
+              
             else if (i == 4)
-             //   synth2.triggerAttackRelease("B3", "4n"),
-                freq = "B";
+            document.getElementById("scale2on").innerHTML =
+            "Whole tone scale",
+            document.getElementById("scale1on").innerHTML =
+            "",
+            document.getElementById("scale3on").innerHTML =
+            "",
+             scaleSelect = ["C2", "D2", "E2", "Gb2", "Ab2", "Bb2", "C3", "D3", "Gb3", "Ab3", "Bb3", "C4", "D4", "E4", "Gb4", "Ab4", "Bb4", "C5", "D5", "E5", "Gb5", "Ab5", "Bb5", "C6"];
+            
             else if (i == 0)
-             //   synth2.triggerAttackRelease("C4", "4n"),
-                freq = "C";
+            document.getElementById("scale3on").innerHTML =
+            "Diatonic scale",
+            document.getElementById("scale2on").innerHTML =
+            "",
+            document.getElementById("scale1on").innerHTML =
+            "",
+             scaleSelect = ["C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"];
+              
 
         }
     }
