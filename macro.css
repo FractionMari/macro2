@@ -70,21 +70,21 @@
 
 #fx1 {
   position: absolute;
-  top: 305px;
+  top: 460px;
   left: 135px;
   font-size: 15px;
 }
 
 #fx2 {
   position: absolute;
-  top: 305px;
+  top: 460px;
   left: 240px;
   font-size: 15px;
 }
 
 #fx3 {
   position: absolute;
-  top: 305px;
+  top: 460px;
   left: 355px;
   font-size: 15px;
 }
@@ -216,6 +216,39 @@
 }
 
 
+/* Animation for gradually disappearing box with instructions. Thanks to https://stackoverflow.com/questions/39513705/make-html-element-disappear-with-css-animation */
+
+@keyframes myAnimation{
+  0%{
+    opacity: 0.5;
+    transform: rotateX(90deg);
+  }
+  50%{
+    opacity: 0.5;
+    transform: rotateX(0deg);
+  }
+  100%{
+    display: none;
+    opacity: 0;
+    transform: rotateX(90deg);
+  }
+}
+
+#myelement{
+  position: absolute;
+  top: 0px;
+  left: 200px;
+  height: 500px;
+  width: 700px;
+  background-color: #000000;
+  text-align: center;
+  color:rgb(255, 255, 255);
+  
+    animation-name: myAnimation;
+    animation-duration: 35000ms;
+    animation-fill-mode: forwards;
+
+}
 
 
 body {

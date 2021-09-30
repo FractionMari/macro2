@@ -15,13 +15,25 @@
 
 
 
-<h1> Macro app v. 2.1, App 2<h2>
+<h1> Macro app v. 2.1 Random music generator<h2>
 
 <div class="center">
   <div class="topnav">
     <a href="./index.html">App 1</a>
     <a class="active" href="./prototype2.html"> App 2</a>
 	<a href="./feedback.html">Feedback?</a>
+  		<button type="button" class="collapsible" id="helpButton">?</button>
+	    	<div class="content">
+      			<p>How to use this app:
+          			<div class="dots">    
+						<li> Turn on your webcamera</li>
+						<li> Turn on your sound</li>
+						<li> Make movement to activate sound</li>
+						<li> Tips: have a static background</li>
+						<li> NB: this web-app does not work in Safari</li>
+
+      				</div>
+    		</div> 
 
 
 
@@ -36,7 +48,7 @@
 		<figure>
 			<canvas id="motion2" width="900" height="500"></canvas>
 		</figure>
-  <p> Refresh page to get a new random groove. NB: this application do not work in Safari </p>
+ 
 	</div>
 <div class="monitoring">
 <p id="synth1on">Synth 1:</p>
@@ -52,7 +64,18 @@
 <p id="tempo"></p>
 <p id="scale"></p>
 </div>
+<p id="myelement"> This app uses motion detection to produce sound. Every time you refresh 
+the page, a new random loop is generated. Some directions: <br>
+						&#9829; Turn ON webcam
+						<br> 	&#9829;  Turn sound ON
+						<br> 	&#9829; Make movement in the air to activate sound
+						<br> 	&#9829; Tips: have a static background
+						<br> 	&#9829; NB: this web-app does not work in Safari
+						<br> 	&#9829; Please give me feedback after testing! :)
 
+						<br> 	&#9829;  &#9829;  &#9829;  
+
+      				</p>
   </div>
     <div id="containerHidden">
 <H1> Hidden span variables:	</H1><span id="score2">?</span><span id="score">?</span>
