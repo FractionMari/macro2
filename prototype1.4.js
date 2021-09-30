@@ -24,7 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 // Denne versjonen er fra 22. februar 2021. Ryddet og stablet.
 // 18. mai: Forsøker å få det til å låte smoothere.Trigger attack-release i stedet for en kontinuerlig tone.
+
 // 30. sept: major changes in design. no more buttons.
+// 30. sept: going back to only two canvases
 // Tone JS variables:
 
     
@@ -50,10 +52,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
     const shift = new Tone.FrequencyShifter().connect(gainNode);
     
     // devide four effects by four to not exceed 100
-    pingPong.wet.value = 1;
-    cheby.wet.value = 1;
-    phaser.wet.value = 1;
-    shift.wet.value = 1;
+    pingPong.wet.value = 0.25;
+    cheby.wet.value = 0.25;
+    phaser.wet.value = 0.25;
+    shift.wet.value = 0.25;
 
     // deafault synth:
     let synth = new Tone.MonoSynth({
@@ -149,7 +151,7 @@ var DiffCamEngine = (function() {
     var includeMotionBox2;		// flag to calculate and draw motion bounding box
     var includeMotionPixels2;	// flag to create object denoting pixels with motion
     
-    // CANVAS 3 VARIABLES:
+/*     // CANVAS 3 VARIABLES:
 	var diffCanvas3;			// internal canvas for diffing downscaled captures BEHOLD
 	var diffContext3;			// context for diff canvas. BEHOLD
     var motionCanvas3;			// receives processed diff images for the second canvas
@@ -158,7 +160,7 @@ var DiffCamEngine = (function() {
     var diffWidth3;				// downscaled width for diff/motion
     var diffHeight3;			// downscaled height for diff/motion for a second canvas
     var includeMotionBox3;		// flag to calculate and draw motion bounding box
-	var includeMotionPixels3;	// flag to create object denoting pixels with motion
+	var includeMotionPixels3;	// flag to create object denoting pixels with motion */
 
 	
 ///////// CANVAS AND WEBCAM OPTIONS /////////////
@@ -221,7 +223,7 @@ function init(options) {
         motionCanvas2.height = diffHeight2;
         motionContext2 = motionCanvas2.getContext('2d');
 
-        // CANVAS 3 SETTINGS
+/*         // CANVAS 3 SETTINGS
         motionCanvas3 = options.motionCanvas3 || document.createElement('canvas3');
         diffWidth3 = options.diffWidth3 || 8;
         diffHeight3 = options.diffHeight3 || 5;
@@ -236,7 +238,7 @@ function init(options) {
         // prep second motion canvas
         motionCanvas3.width = diffWidth3;
         motionCanvas3.height = diffHeight3;
-        motionContext3 = motionCanvas3.getContext('2d');
+        motionContext3 = motionCanvas3.getContext('2d'); */
 
         // If making new canvases, remember to update "diffcam.js"
 
@@ -267,11 +269,11 @@ function capture() {
     diffContext2.globalCompositeOperation = 'difference'; 
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);   
     // denne forskjellen er viktig. diffContext2 er essensiell.
-    var diffImageData2 = diffContext2.getImageData(2, 4, diffWidth2, 1); // BEHOLD
+    var diffImageData2 = diffContext2.getImageData(2, 3, diffWidth2, 2); // BEHOLD
     //*** behold */
     diffContext2.globalCompositeOperation = 'source-over';
     diffContext2.drawImage(video, 0, 0, diffWidth2, diffHeight2);
-
+/* 
 
     // CANVAS 3:
     var captureImageData3 = captureContext.getImageData(0, 4, captureWidth, 1);
@@ -285,9 +287,9 @@ function capture() {
         
     var diffImageData3 = diffContext3.getImageData(2, 3, diffWidth3, 1); // BEHOLD
     //*** behold */
-    diffContext3.globalCompositeOperation = 'source-over';
+/*     diffContext3.globalCompositeOperation = 'source-over';
     diffContext3.drawImage(video, 0, 0, diffWidth3, diffHeight3);
-
+ */
 
     if (isReadyToDiff) {     
         // Canvas 1 (Filter):
@@ -325,7 +327,7 @@ function capture() {
         // Canvas 2 (Oscillator):
         var diff2 = processDiff2(diffImageData2);
         // this is where you place the grid on the canvas
-        motionContext2.putImageData(diffImageData2, 2, 4);
+        motionContext2.putImageData(diffImageData2, 2, 3);
         if (diff2.motionBox) {
             motionContext2.strokeStyle = '#fff';
             motionContext2.strokeRect(
@@ -349,7 +351,7 @@ function capture() {
             return checkMotionPixel(this.motionPixels, x, y)
         }      	            
         });
-
+/* 
 
  // Canvas 3 (Oscillator):
  var diff3 = processDiff3(diffImageData3);
@@ -381,7 +383,7 @@ function capture() {
  checkMotionPixel: function(x, y) {
      return checkMotionPixel(this.motionPixels, x, y)
  }      	            
- });
+ }); */
 
     }
     }
@@ -422,12 +424,10 @@ function capture() {
             // Scaling the number with generateScaleFunction
             let filterScale = generateScaleFunction(0, 249, 0, 10);      
             xValue = filterScale(xValue);
-            yNormValue = (((i * (-1)) + 248)/ 248)
             // This is where any value can be controlled by the number "i".
-            console.log(yNormValue);
+            
             phaser.frequency.value = xValue;
-            pingPong.delayTime.value = i;
-            pingPong.feedback.value = yNormValue;
+            
             let chebyValue = Math.floor((xValue / 10) * 100);
             cheby.order = chebyValue;
             shift.frequency.value = xValue * 50;
@@ -485,7 +485,7 @@ function capture() {
         for (var i = 0; 
             i < rgba.length; i += 4) {
 			var pixelDiff = rgba[i] * 0.3 + rgba[i + 1] * 0.3 + rgba[i + 2] * 0.3;
-            var normalized2 = Math.min(255, pixelDiff * (70 / pixelDiffThreshold));
+            var normalized2 = Math.min(255, pixelDiff * (100 / pixelDiffThreshold));
             
 			rgba[i] = normalized2; // rød
 			rgba[i + 1] = 0; // grønn
@@ -507,23 +507,21 @@ function capture() {
 
             // A function for activation of notes:
             
-//console.log(i);
+console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
-            if (i == 20)
+            if (i == 52)
                 document.getElementById("fx1on").innerHTML =
                 "on",
                 document.getElementById("fx1off").innerHTML =
                 "",
                 gainSynth1.connect(phaser);
-
-
-            else if (i == 16)
+            else if (i == 48)
                 document.getElementById("fx2on").innerHTML =
                 "on",
                 document.getElementById("fx2off").innerHTML =
                 "",
                 gainSynth1.connect(shift);
-            else if (i == 12)
+            else if (i == 44)
                 document.getElementById("fx3on").innerHTML =
                 "on",
                 document.getElementById("fx3off").innerHTML =
@@ -531,7 +529,7 @@ function capture() {
                 gainSynth1.connect(pingPong);
 
             // instruments on:
-            else if (i == 8)
+            else if (i == 40)
             document.getElementById("instr1on").innerHTML =
             "Synth1: on",
             document.getElementById("instr2on").innerHTML =
@@ -569,7 +567,7 @@ function capture() {
             
                   }).connect(gainSynth1);
 
-            else if (i == 4)
+            else if (i == 36)
             document.getElementById("instr2on").innerHTML =
             "Synth2: on",
             document.getElementById("instr1on").innerHTML =
@@ -585,24 +583,80 @@ function capture() {
             
             }).connect(gainSynth1);
     
-            else if (i == 0)
+            else if (i == 32)
             document.getElementById("instr3on").innerHTML =
             "Synth3: on",
             document.getElementById("instr2on").innerHTML =
             "",
             document.getElementById("instr1on").innerHTML =
             "",
-            synth = new Tone.MonoSynth({
-                oscillator: {
-                    type: "sine2"
-                },
-                envelope: {
-                    attack: 0.5,
-                    decay: 0.3,
-                    sustain: 1.0,
-                    release: 0.8
-                }
-            }).connect(gainSynth1);
+                synth = new Tone.Synth({
+                    volume: -9,
+                    oscillator: {
+                      type: "sine6"
+                    },
+                    envelope: {
+                      attack: 0.1,
+                      decay: 0.3,
+                      sustain: 0.4,
+                      release: 0.5,
+                    }
+                  }).connect(gainSynth1);
+
+
+                 
+                else if (i == 20)
+                  document.getElementById("fx1on").innerHTML =
+                  "",
+                  document.getElementById("fx1off").innerHTML =
+                  "off",
+                  gainSynth1.disconnect(phaser);
+  
+  
+              else if (i == 16)
+                  document.getElementById("fx2on").innerHTML =
+                  "",
+                  document.getElementById("fx2off").innerHTML =
+                  "off",
+                  gainSynth1.disconnect(shift);
+
+              else if (i == 12)
+                  document.getElementById("fx3on").innerHTML =
+                  "",
+                  document.getElementById("fx3off").innerHTML =
+                  "off",
+                  gainSynth1.disconnect(pingPong);
+          
+                    
+              else if (i == 8)
+              document.getElementById("scale1on").innerHTML =
+              "Pentatone scale",
+              document.getElementById("scale2on").innerHTML =
+              "",
+              document.getElementById("scale3on").innerHTML =
+              "",
+              scaleSelect = ["G#1", "A#1","C#2", "D#2", "F#2", "G#2", "A#2","C#3", "D#3", "F#3", "G#3", "A#3","C#4", "D#4", "F#4", "G#4", "A#4", "C#5", "D#5", "F#5", "G#5", "A#5", "C#6"];
+
+              
+              else if (i == 4)
+              document.getElementById("scale2on").innerHTML =
+              "Whole tone scale",
+              document.getElementById("scale1on").innerHTML =
+              "",
+              document.getElementById("scale3on").innerHTML =
+              "",
+               scaleSelect = ["C2", "D2", "E2", "Gb2", "Ab2", "Bb2", "C3", "D3", "Gb3", "Ab3", "Bb3", "C4", "D4", "E4", "Gb4", "Ab4", "Bb4", "C5", "D5", "E5", "Gb5", "Ab5", "Bb5", "C6"];
+              
+              else if (i == 0)
+              document.getElementById("scale3on").innerHTML =
+              "Diatonic scale",
+              document.getElementById("scale2on").innerHTML =
+              "",
+              document.getElementById("scale1on").innerHTML =
+              "",
+               scaleSelect = ["C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5"];
+                
+  
             
 
 			}
@@ -616,7 +670,7 @@ function capture() {
 
 
 
-
+/* 
 
     // CANVAS 3 PROCESSING DIFF
 // The second one is the X axis, currently controlling pitch
@@ -680,7 +734,7 @@ function processDiff3(diffImageData3) {
             "",
             document.getElementById("scale3on").innerHTML =
             "",
-            scaleSelect = ["G#1", "A#1","C#2", "D#2", "F#2", "G#2", "A#2","C#3", "D#3", "F#3", "G#3", "A#3","C#4", "D#4", "F#4", "G#4", "A#4", "C#5", "D#5", "F#5", "G#5", "A#5", "C#6"];
+            scaleSelect = ["G1", "A1","C2", "D2", "F2", "G2", "A2","C3", "D3", "F3", "G3", "A3","C4", "D4", "F4", "G4", "A4", "C5", "D5", "F5", "G5", "A5", "C6"];
               
             else if (i == 4)
             document.getElementById("scale2on").innerHTML =
@@ -712,7 +766,7 @@ function processDiff3(diffImageData3) {
 
 
 
-
+ */
 
 
 // Functions we don't need to duplicate:
