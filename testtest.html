@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Macro app v. 1.1</title>
+
+		<link href="macro.css" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@200&display=swap" rel="stylesheet">
+	</head>
+	<body>
+<script src="https://tonejs.github.io/build/Tone.js"></script>
+
+<h1> testeste<h2>
+
+
+
+<button id="buttonz">Play</button>
+<br>
+<button id="change">Change</button>
+
+<script>
+
+    let synth6 = new Tone.MonoSynth().toDestination();
+
+    document.getElementById("buttonz").addEventListener("click", function(){
+
+synth6.triggerAttackRelease("C2", "4n");
+
+});
+
+    document.getElementById("change").addEventListener("click", function(){
+
+
+
+if(this.className == 'is-playing'){
+      this.className = "2";
+      this.innerHTML = "monosynth";
+    synth6 = new Tone.MonoSynth().toDestination();
+
+    }else if(this.className == '2'){
+      this.className = "";
+      this.innerHTML = "sampler";
+
+    synth6 = new Tone.Sampler({
+	urls: {
+		A1: "A1.mp3",
+		A2: "A2.mp3",
+	},
+	baseUrl: "https://tonejs.github.io/audio/casio/",
+	onload: () => {
+		sampler.triggerAttackRelease(["C1", "E1", "G1", "B1"], 0.5);
+	}
+}).toDestination();
+  
+    
+  }else{
+      this.className = "is-playing";
+      this.innerHTML = "synth";
+      synth6 = new Tone.Synth().toDestination();
+  
+    }
+
+});
+
+</script>
+	</body>
+</html>
