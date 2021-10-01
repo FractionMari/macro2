@@ -350,43 +350,25 @@ function capture() {
             // Scaling the number with generateScaleFunction
             let filterScale = generateScaleFunction(0, 249, 0, 10);      
             xValue = filterScale(xValue);
+            yNormValue = (((i * (-1)) + 248)/ 248)
             // This is where any value can be controlled by the number "i".
-            
+           // console.log(yNormValue);
             phaser.frequency.value = xValue;
-            
+            pingPong.delayTime.value = i;
+            pingPong.feedback.value = yNormValue;
             let chebyValue = Math.floor((xValue / 10) * 100);
             cheby.order = chebyValue;
             shift.frequency.value = xValue * 50;
 
+            //let note = (((i * (-1)) + 248) / 8);
 
            //phaser.baseFrequency.rampTo(xValue, 0.2);
-           //console.log(xValue);
+           console.log(note);
 
-           if (i == 248)
-                synth.triggerAttackRelease(scaleSelect[0], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[0];
-            else if (i == 216)
-                synth.triggerAttackRelease(scaleSelect[1], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[1];
-            else if (i == 184)
-                synth.triggerAttackRelease(scaleSelect[2], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[2];
-            else if (i == 152)
-                synth.triggerAttackRelease(scaleSelect[3], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[3];
-            else if (i == 120)
-                synth.triggerAttackRelease(scaleSelect[4], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[4];
-            else if (i == 88)
-                synth.triggerAttackRelease(scaleSelect[5], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[5];
-            else if (i == 56)
-                synth.triggerAttackRelease(scaleSelect[6], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[6];         
-            else if (i == 24)
-                synth.triggerAttackRelease(scaleSelect[7], "2n"),
-                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[7];
-            
+           // A function for activation of notes:
+           synth.triggerAttackRelease(scaleSelect[note], "2n"),
+                document.getElementById("synthNote").innerHTML = "Note: " + scaleSelect[note];
+
 			}
         }
 
@@ -429,11 +411,9 @@ function capture() {
 					motionPixels = calculateMotionPixels(motionPixels, coords.x, coords.y, pixelDiff);			
 				}
 
-			// using the x coords to change pitch
 
-            // A function for activation of notes:
             
-console.log(i);
+//console.log(i);
 // i vaues from left to right: 28, 24, 20, 16, 12, 8, 5
             if (i == 52)
                 document.getElementById("fx1on").innerHTML =

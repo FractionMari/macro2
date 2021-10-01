@@ -220,7 +220,7 @@
 
 @keyframes myAnimation{
   0%{
-    opacity: 0.5;
+    opacity: 0.9;
     transform: rotateX(90deg);
   }
   50%{
@@ -238,7 +238,7 @@
   position: absolute;
   top: 0px;
   left: 200px;
-  height: 500px;
+  height: 900px;
   width: 700px;
   background-color: #000000;
   text-align: center;
